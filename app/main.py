@@ -4,20 +4,23 @@ from app.api import jd, resume, suggestion, chat, match
 
 app = FastAPI()
 
-# CORS configuration
-origins = [
-    "http://localhost:3000",  # React / Next.js frontend
-    "http://127.0.0.1:3000",
-    # add your deployed frontend URL later
-]
-
+# ✅ Allow ALL origins (for now)
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=origins,       # or ["*"] for dev
+    allow_origins=["*"],        # allow all
     allow_credentials=True,
-    allow_methods=["*"],         # GET, POST, PUT, DELETE, etc.
-    allow_headers=["*"],         # allow all headers
+    allow_methods=["*"],
+    allow_headers=["*"],
 )
+
+# ✅ Test Route
+@app.get("/")
+def root():
+    return {"message": "API is running 🚀"}
+
+@app.get("/health")
+def health_check():
+    return {"status": "ok"}
 
 # Routers
 app.include_router(jd.router, prefix="/jd")
